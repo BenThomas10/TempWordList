@@ -1,0 +1,58 @@
+﻿@model IEnumerable<WordLists.Models.RejectedWord>
+
+@{
+    ViewBag.Title = "Rejected Words";
+}
+
+@*<h2>Index</h2>*@
+@using (Html.BeginForm())
+{
+    <p>
+        @Html.DropDownList("ClientFilter", (SelectList)ViewBag.ClientList, " Client ", new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" })    @Html.DropDownList("VersionFilter", (SelectList)ViewBag.VersionList, " Word List Name ", new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" } ) @Html.DropDownList("LengthFilter", (SelectList)ViewBag.WordLengths, " All Lengths ", new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" })
+        
+        @*@Html.TextBox("SearchString", null, new { @class = "form-control-sm", @style = "display:inline;" })*@
+        @*<input type="submit" value="Search" class="btn btn-sm" />*@
+    </p>
+}
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+
+@if (ViewBag.CanEdit)
+{
+    <table class="table">
+        <tr>
+            @*<th>
+                @Html.DisplayNameFor(model => model.ListName.Id)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Word)
+            </th>
+           <th>
+               <div>
+                  
+                       @Html.ActionLink("Add Words", "Create", "RejectedWords")
+                   
+               </div>
+           </th>
+        </tr>
+    
+    @foreach (var item in Model)
+    {
+        <tr>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.ListName.Id)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Word)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+}

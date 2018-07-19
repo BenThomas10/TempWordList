@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="~/Content/bootstrap.css">
+<link rel="stylesheet" href="~/Content/custom.css" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
+@Styles.Render("~/Content/css")
+@Styles.Render("~/Content/custom.css")
+@Scripts.Render("~/bundles/modernizr")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@RenderSection("scripts", required: false)
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+<head>
+    <title>@ViewBag.Title - IGT Word List Database</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-IGT">
+        <a class="navbar"> <img src="~/Images/IGT_BLUE_small.gif" alt="Company logo" Height="40" Width="94" font/>Word List DB</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <l1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</l1>
+                <li>
+                    <a class="navbar" href="~/ApprovedWords">Approved Words</a>
+                </li>
+                <li>
+                    <a class="navbar" href="~/RejectedWords">Rejected Words</a>
+                </li>
+                <li>
+                    <a class="navbar" href="~/ListNames">Client Word Lists</a>
+                </li>
+                <li>
+                    <a class="navbar" href="~/Clients">Clients</a>
+                </li>
+            </ul>
+        </div>
+        <div class="navbar navbar-right">
+            @Html.Partial("_LoginPartial")
+        </div>
+    </nav>
+    <br />
+    <br />
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - International Gaming Technology</p>
+        </footer>
+    </div>
+
+</body>
+</html>
+
