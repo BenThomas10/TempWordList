@@ -7,13 +7,13 @@ namespace WordLists.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class addedRejectedListPropertyToListNames : IMigrationMetadata
+    public sealed partial class initialize : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addedRejectedListPropertyToListNames));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initialize));
         
         string IMigrationMetadata.Id
         {
-            get { return "201807170117296_addedRejectedListPropertyToListNames"; }
+            get { return "201808060222282_initialize"; }
         }
         
         string IMigrationMetadata.Source

@@ -4,11 +4,11 @@
     ViewBag.Title = "Rejected Words";
 }
 
-@*<h2>Index</h2>*@
+<h5>Rejected Words</h5>
 @using (Html.BeginForm())
 {
     <p>
-        @Html.DropDownList("ClientFilter", (SelectList)ViewBag.ClientList, " Client ", new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" })    @Html.DropDownList("VersionFilter", (SelectList)ViewBag.VersionList, " Word List Name ", new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" } ) @Html.DropDownList("LengthFilter", (SelectList)ViewBag.WordLengths, " All Lengths ", new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" })
+        @Html.DropDownList("ClientFilter", (SelectList)ViewBag.ClientList, (string)ViewBag.DefaultClientNameRejected, new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" })    @Html.DropDownList("VersionFilter", (SelectList)ViewBag.VersionList, (String)ViewBag.DefaultListNameRejected, new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" } ) @Html.DropDownList("LengthFilter", (SelectList)ViewBag.WordLengths, " All Lengths ", new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" })
         
         @*@Html.TextBox("SearchString", null, new { @class = "form-control-sm", @style = "display:inline;" })*@
         @*<input type="submit" value="Search" class="btn btn-sm" />*@
@@ -26,13 +26,11 @@
                 @Html.DisplayNameFor(model => model.ListName.Id)
             </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.Word)
+                @Html.ActionLink("Words", "Index", new { sortOrder = ViewBag.WordSort }) @ViewBag.wordCount
             </th>
            <th>
                <div>
-                  
-                       @Html.ActionLink("Add Words", "Create", "RejectedWords")
-                   
+                       @Html.ActionLink("<  Add  >", "Create", "RejectedWords")
                </div>
            </th>
         </tr>

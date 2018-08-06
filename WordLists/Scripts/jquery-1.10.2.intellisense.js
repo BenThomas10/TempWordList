@@ -1204,13 +1204,13 @@ intellisense.annotate(jQuery.fn, {
   },
   'die': function() {
     /// <signature>
-    ///   <summary>Remove event handlers previously attached using .live() from the elements.</summary>
+    ///   <summary>Remove event handlers previously attached using .Archive() from the elements.</summary>
     ///   <param name="eventType" type="String">A string containing a JavaScript event type, such as click or keydown.</param>
     ///   <param name="handler" type="String">The function that is no longer to be executed.</param>
     ///   <returns type="jQuery" />
     /// </signature>
     /// <signature>
-    ///   <summary>Remove event handlers previously attached using .live() from the elements.</summary>
+    ///   <summary>Remove event handlers previously attached using .Archive() from the elements.</summary>
     ///   <param name="events" type="PlainObject">A plain object of one or more event types, such as click or keydown and their corresponding functions that are no longer to be executed.</param>
     ///   <returns type="jQuery" />
     /// </signature>

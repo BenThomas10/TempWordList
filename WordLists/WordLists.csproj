@@ -200,24 +200,22 @@
     <Compile Include="Controllers\ApprovedWordsController.cs" />
     <Compile Include="Controllers\ClientsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <None Include="Controllers\ListVersionsController.OLD" />
     <Compile Include="Controllers\ListNamesController.cs" />
-    <None Include="Controllers\RejectedWordsController.OLD" />
     <Compile Include="Controllers\RejectedWordsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807110113069_intialCreate.cs" />
-    <Compile Include="Migrations\201807110113069_intialCreate.Designer.cs">
-      <DependentUpon>201807110113069_intialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201807270012505_init.cs" />
+    <Compile Include="Migrations\201807270012505_init.Designer.cs">
+      <DependentUpon>201807270012505_init.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807150134086_changeVersionToName.cs" />
-    <Compile Include="Migrations\201807150134086_changeVersionToName.Designer.cs">
-      <DependentUpon>201807150134086_changeVersionToName.cs</DependentUpon>
+    <Compile Include="Migrations\201807270059165_requireFields.cs" />
+    <Compile Include="Migrations\201807270059165_requireFields.Designer.cs">
+      <DependentUpon>201807270059165_requireFields.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807170117296_addedRejectedListPropertyToListNames.cs" />
-    <Compile Include="Migrations\201807170117296_addedRejectedListPropertyToListNames.Designer.cs">
-      <DependentUpon>201807170117296_addedRejectedListPropertyToListNames.cs</DependentUpon>
+    <Compile Include="Migrations\201808060222282_initialize.cs" />
+    <Compile Include="Migrations\201808060222282_initialize.Designer.cs">
+      <DependentUpon>201808060222282_initialize.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -293,10 +291,6 @@
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
-    <Content Include="Scripts\populateUserWorkshopDropdownsCreate.js" />
-    <Content Include="Scripts\populateUserWorkshopDropdownsEdit.js" />
-    <Content Include="Scripts\populateWorkshopDropdownsCreate.js" />
-    <Content Include="Scripts\populateWorkshopDropdownsEdit.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
@@ -331,17 +325,10 @@
     <Content Include="Views\ApprovedWords\Edit.cshtml" />
     <Content Include="Views\ApprovedWords\Index.cshtml" />
     <Content Include="Views\RejectedWords\Create.cshtml" />
-    <None Include="Views\RejectedWords\Create.OLD" />
     <Content Include="Views\RejectedWords\Delete.cshtml" />
     <Content Include="Views\RejectedWords\Details.cshtml" />
     <Content Include="Views\RejectedWords\Edit.cshtml" />
     <Content Include="Views\RejectedWords\Index.cshtml" />
-    <None Include="Views\RejectedWords\Index.OLD" />
-    <Content Include="Views\ListNamesOLD\Create.cshtml" />
-    <Content Include="Views\ListNamesOLD\Delete.cshtml" />
-    <Content Include="Views\ListNamesOLD\Details.cshtml" />
-    <Content Include="Views\ListNamesOLD\Edit.cshtml" />
-    <Content Include="Views\ListNamesOLD\Index.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
     <Content Include="Scripts\umd\popper-utils.min.js.map" />
@@ -351,6 +338,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\ApprovedWords\_PartialWaiting.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -362,21 +350,21 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807110113069_intialCreate.resx">
-      <DependentUpon>201807110113069_intialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807150134086_changeVersionToName.resx">
-      <DependentUpon>201807150134086_changeVersionToName.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807170117296_addedRejectedListPropertyToListNames.resx">
-      <DependentUpon>201807170117296_addedRejectedListPropertyToListNames.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201807270012505_init.resx">
+      <DependentUpon>201807270012505_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807270059165_requireFields.resx">
+      <DependentUpon>201807270059165_requireFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808060222282_initialize.resx">
+      <DependentUpon>201808060222282_initialize.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

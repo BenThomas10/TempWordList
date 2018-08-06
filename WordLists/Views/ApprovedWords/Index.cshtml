@@ -4,11 +4,12 @@
     ViewBag.Title = "Approved Words";
 }
 
-@*<h2>Index</h2>*@
+<h5>Approved Words</h5>
+
 @using (Html.BeginForm())
 {
-    <p>
-        @Html.DropDownList("ClientFilter", (SelectList)ViewBag.ClientList, " Client ", new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" })    @Html.DropDownList("VersionFilter", (SelectList)ViewBag.VersionList, " Word List Name ", new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" } ) @Html.DropDownList("LengthFilter", (SelectList)ViewBag.WordLengths, " All Lengths ", new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" })
+     <p>
+        @Html.DropDownList("ClientFilter", (SelectList)ViewBag.ClientList, (string)ViewBag.DefaultClientName, new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" })    @Html.DropDownList("VersionFilter", (SelectList)ViewBag.VersionList, (String)ViewBag.DefaultListName, new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" }) @Html.DropDownList("LengthFilter", (SelectList)ViewBag.WordLengths, "- All Lengths -", new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" })
         
         @*@Html.TextBox("SearchString", null, new { @class = "form-control-sm", @style = "display:inline;" })*@
         @*<input type="submit" value="Search" class="btn btn-sm" />*@
@@ -26,13 +27,11 @@
                 @Html.DisplayNameFor(model => model.ListName.Id)
             </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.Word)
+               @Html.ActionLink("Words", "Index", new { sortOrder = ViewBag.WordSort })  @ViewBag.wordCount
             </th>
            <th>
                <div>
-                  
-                       @Html.ActionLink("Add Words", "Create", "ApprovedWords")
-                   
+                   @Html.ActionLink("<  Add  >", "Create", "ApprovedWords")
                </div>
            </th>
         </tr>
@@ -53,6 +52,6 @@
             </td>
         </tr>
     }
+    </table>
 
-</table>
 }

@@ -17,7 +17,9 @@ namespace WordLists.Controllers
         // GET: Clients
         public ActionResult Index()
         {
-            return View(db.Clients.ToList());
+            HttpContext.Session["list_canNull"] = true;
+            return View(db.Clients.OrderBy(p => p.Name).ToList());
+            
         }
 
         // GET: Clients/Details/5

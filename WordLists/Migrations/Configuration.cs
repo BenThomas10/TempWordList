@@ -9,7 +9,7 @@ namespace WordLists.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(WordLists.Models.ApplicationDbContext context)

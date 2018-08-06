@@ -1,32 +1,38 @@
 ﻿@model IEnumerable<WordLists.Models.ListName>
 
-@*@{
+@{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>*@
+<h5>Word Lists</h5>
+@using (Html.BeginForm())
+{
+<div>
+</div>
 
 <p>
-    @Html.ActionLink("Create New List", "Create")
+    @Html.DropDownList("ClientFilter", (SelectList)ViewBag.ClientList, (string)ViewBag.DefaultClientName, new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" })
+    &nbsp;&nbsp;&nbsp;@Html.ActionLink("Create New List", "Create")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Client.Name)
+            @Html.DisplayNameFor(model => model.Client.Name) 
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.listName)
+            @Html.DisplayNameFor(model => model.listName) @ViewBag.ListCount
         </th>
         <th>
             @Html.DisplayNameFor(model => model.IsRejected)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Live)
+            @Html.DisplayNameFor(model => model.Archive)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model)
+{
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Client.Name)
@@ -38,14 +44,15 @@
             @Html.DisplayFor(model => item.IsRejected)
         </th>
         <td>
-            @Html.DisplayFor(modelItem => item.Live)
+            @Html.DisplayFor(modelItem => item.Archive)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+            @*@Html.ActionLink("Details", "Details", new { id = item.Id })*@
+            @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
         </td>
     </tr>
 }
 
 </table>
+}

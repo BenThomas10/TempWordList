@@ -3,7 +3,7 @@ namespace WordLists.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class intialCreate : DbMigration
+    public partial class init : DbMigration
     {
         public override void Up()
         {
@@ -25,8 +25,9 @@ namespace WordLists.Migrations
                     {
                         Id = c.Guid(nullable: false, identity: true),
                         ClientId = c.Guid(nullable: false),
-                        listName = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        Live = c.Boolean(nullable: false),
+                        listName = c.String(),
+                        Archive = c.Boolean(nullable: false),
+                        IsRejected = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Clients", t => t.ClientId, cascadeDelete: true)

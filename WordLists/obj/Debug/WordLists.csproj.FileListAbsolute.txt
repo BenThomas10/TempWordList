@@ -79,8 +79,8 @@ c:\users\flapjax\documents\visual studio 2015\Projects\WordLists\WordLists\bin\M
 c:\users\flapjax\documents\visual studio 2015\Projects\WordLists\WordLists\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 c:\users\flapjax\documents\visual studio 2015\Projects\WordLists\WordLists\obj\Debug\WordLists.dll
 c:\users\flapjax\documents\visual studio 2015\Projects\WordLists\WordLists\obj\Debug\WordLists.pdb
-c:\users\flapjax\documents\visual studio 2015\Projects\WordLists\WordLists\obj\Debug\WordLists.Migrations.intialCreate.resources
-c:\users\flapjax\documents\visual studio 2015\Projects\WordLists\WordLists\obj\Debug\WordLists.csproj.GenerateResource.Cache
-C:\Users\flapjax\documents\visual studio 2015\Projects\WordLists\WordLists\obj\Debug\WordLists.Migrations.changeVersionToName.resources
 C:\Users\flapjax\documents\visual studio 2015\Projects\WordLists\WordLists\obj\Debug\WordLists.csprojResolveAssemblyReference.cache
-C:\Users\flapjax\documents\visual studio 2015\Projects\WordLists\WordLists\obj\Debug\WordLists.Migrations.addedRejectedListPropertyToListNames.resources
+C:\Users\flapjax\documents\visual studio 2015\Projects\WordLists\WordLists\obj\Debug\WordLists.Migrations.init.resources
+C:\Users\flapjax\documents\visual studio 2015\Projects\WordLists\WordLists\obj\Debug\WordLists.csproj.GenerateResource.Cache
+C:\Users\flapjax\documents\visual studio 2015\Projects\WordLists\WordLists\obj\Debug\WordLists.Migrations.requireFields.resources
+C:\Users\flapjax\Documents\visual studio 2015\Projects\WordLists\WordLists\obj\Debug\WordLists.Migrations.initialize.resources

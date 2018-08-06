@@ -7,13 +7,13 @@ namespace WordLists.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class changeVersionToName : IMigrationMetadata
+    public sealed partial class requireFields : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(changeVersionToName));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(requireFields));
         
         string IMigrationMetadata.Id
         {
-            get { return "201807150134086_changeVersionToName"; }
+            get { return "201807270059165_requireFields"; }
         }
         
         string IMigrationMetadata.Source

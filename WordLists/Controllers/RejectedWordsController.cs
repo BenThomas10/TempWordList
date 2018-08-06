@@ -10,75 +10,155 @@ using System.Web.Mvc;
 using WordLists.Models;
 using System.Text.RegularExpressions;
 
+
 namespace WordLists.Controllers
 {
     public class RejectedWordsController : Controller
     {
+
+        //this name controls the master rejected list name to look for when rejecting approved words
+        private string masterRejectedListName = "Master Rejected Word List";
+
         private ApplicationDbContext db = new ApplicationDbContext();
-        public static Guid listGuid;
-        public static Guid clientGuid;
-        public static int? LengthFromFilter;
-        public static List<int> Lengths = new List<int>();
-        public IEnumerable<int> WordLengthsDistinct;
-        public IOrderedQueryable<RejectedWord> VersionRejectedWords;
-       
+        private bool isRedirect = false;
+        private static List<int> Lengths = new List<int>();
+        private IEnumerable<int> WordLengthsDistinct;
+        private IOrderedQueryable<RejectedWord> VersionRejectedWords;
+        private List<SelectListItem> emptyList = new List<SelectListItem>();
 
         // GET: RejectedWords
-        public async Task<ActionResult> Index(Guid? ClientFilter, Guid? VersionFilter, int? LengthFilter)
+        public async Task<ActionResult> Index(Guid? ClientFilter, Guid? VersionFilter, int? LengthFilter, string sortOrder)
         {
-            ViewBag.CanEdit = true;
-            if (clientGuid == null)
+            //hides the view's add button and title
+            ViewBag.CanEdit = false;
+            HttpContext.Session["list_canNull"] = true;
+
+            //view dropdown default selection text
+            ViewBag.DefaultClientNameRejected = "- Client -";
+            ViewBag.DefaultListNameRejected = "- List Name -";
+
+            if (ClientFilter == null && VersionFilter == null && LengthFilter == null &&
+                HttpContext.Session["clientGuidRejectedRejected"] as Guid? != Guid.Empty && HttpContext.Session["listGuidRejected"] as Guid? != Guid.Empty)
             {
-                ViewBag.CanEdit = false;
-                Lengths.Clear();
+                ClientFilter = HttpContext.Session["clientGuidRejected"] as Guid?;
+                VersionFilter = HttpContext.Session["listGuidRejected"] as Guid?;
+                LengthFilter = HttpContext.Session["LengthFromFilterRejected"] as int?;
             }
 
+            if (isRedirect)
+            {
+                ViewBag.CanEdit = true;
+                isRedirect = false;
+            }
 
             if (ClientFilter != null)
             {
-                clientGuid = new Guid(ClientFilter.ToString());
-                LengthFromFilter = LengthFilter;
-                Lengths.Clear();
+                isRedirect = true;
+                ViewBag.DefaultClientNameRejected = null;
 
-                if (VersionFilter != null)
+                if (ClientFilter != HttpContext.Session["clientGuidRejected"] as Guid?)
                 {
+                    HttpContext.Session["clientGuidRejected"] = new Guid(ClientFilter.ToString());
+                    Lengths.Clear();
+                    VersionFilter = null;
+                    HttpContext.Session["LengthFromFilterRejected"] = null;
+                }
 
-                    listGuid = new Guid(VersionFilter.ToString());
+                if (VersionFilter != null && ClientFilter != null)
+                {
+                    ViewBag.DefaultListNameRejected = null;
                     ViewBag.CanEdit = true;
-
-                    foreach (var rw in db.RejectedWords.Where(a => a.ListNameId == listGuid))
+                    if (HttpContext.Session["LengthFromFilterRejected"] as int? != LengthFilter)
                     {
-                        Lengths.Add(rw.Word.Length);
+                        ViewBag.DefaultListNameRejected = null;
+                    }
+                    HttpContext.Session["LengthFromFilterRejected"] = LengthFilter;
+
+
+                    if (VersionFilter != HttpContext.Session["listGuidRejected"] as Guid? || System.Web.HttpContext.Current.Session["hasAdded_r"] as int? != null)
+                    {
+                        if(System.Web.HttpContext.Current.Session["hasAdded_r"] as int? == null)
+                        HttpContext.Session["listGuidRejected"] = new Guid(VersionFilter.ToString());
+
+                        Lengths.Clear();
+                        var list_Guid = HttpContext.Session["listGuidRejected"] as Guid?;
+                        foreach (var aw in db.RejectedWords.Where(a => a.ListNameId == list_Guid))
+                        {
+                            Lengths.Add(aw.Word.Length);
+                        }
                     }
                 }
                 else
                 {
                     ViewBag.CanEdit = false;
                     Lengths.Clear();
+                    HttpContext.Session["LengthFromFilterRejected"] = null;
                 }
             }
-            WordLengthsDistinct = Lengths.Distinct();
 
+            var versions = await db.ListNames.OrderBy(m => m.listName).ToListAsync();
+            ViewBag.VersionList = new SelectList(versions.Where(m => m.ClientId == HttpContext.Session["clientGuidRejected"] as Guid? && m.Archive == false && m.IsRejected == true)
+                .OrderBy(m => m.listName).ToList(), "Id", "listName", HttpContext.Session["listGuidRejected"] as Guid?);
 
-            if (LengthFromFilter != null && listGuid != null && clientGuid != null)
+            if (ClientFilter == null && VersionFilter != null)
             {
-                VersionRejectedWords = db.RejectedWords.Where(a => a.ListNameId == listGuid && a.Word.Length == LengthFromFilter).OrderBy(b => b.Word);
+                ViewBag.VersionList = new SelectList(items: "");
+                HttpContext.Session["LengthFromFilterRejected"] = null;
+                Lengths.Clear();
+                isRedirect = false;
+                ViewBag.CanEdit = false;
+                HttpContext.Session["listGuidRejected"] = Guid.Empty;
+                HttpContext.Session["clientGuidRejected"] = Guid.Empty;
+            }
+
+            System.Web.HttpContext.Current.Session["hasAdded_r"] = null;
+            WordLengthsDistinct = Lengths.Distinct();
+            ViewBag.WordLengths = new SelectList(WordLengthsDistinct.OrderBy(p => p), HttpContext.Session["LengthFromFilterRejected"] as int?);
+
+            var clients = await db.Clients.Include(m => m.ListNames).Where(m => m.ListNames.Any(l => l.IsRejected == true)).ToListAsync();
+            ViewBag.ClientList = new SelectList(clients.OrderBy(m => m.Name), "Id", "Name", HttpContext.Session["clientGuidRejected"] as Guid?);
+
+            ViewBag.WordSort = string.IsNullOrEmpty(sortOrder) ? "wordDesc" : "";
+
+            var listID = HttpContext.Session["listGuidRejected"] as Guid?;
+            int? filterLength = HttpContext.Session["LengthFromFilterRejected"] as int?;
+
+            if (sortOrder == "wordDesc")
+            {
+                VersionRejectedWords = db.RejectedWords.OrderByDescending(m => m.Word).Where(a => a.ListNameId == listID).OrderByDescending(b => b.Word);
+
+                if (HttpContext.Session["LengthFromFilterRejected"] as int? != null)
+                {
+                    VersionRejectedWords = db.RejectedWords.Where(a => a.ListNameId == listID && a.Word.Length == filterLength).OrderByDescending(b => b.Word);
+                }
+
+                if (VersionRejectedWords.Count() < 1)
+                {
+                    VersionRejectedWords = db.RejectedWords.Where(a => a.ListNameId == listID).OrderByDescending(b => b.Word);
+                }
+
             }
             else
             {
-                VersionRejectedWords = db.RejectedWords.Where(a => a.ListNameId == listGuid).OrderBy(b => b.Word);
+
+                VersionRejectedWords = db.RejectedWords.Where(a => a.ListNameId == listID).OrderBy(b => b.Word);
+
+                if (HttpContext.Session["LengthFromFilterRejected"] as int? != null)
+                {
+
+                    VersionRejectedWords = db.RejectedWords.Where(a => a.ListNameId == listID && a.Word.Length == filterLength).OrderBy(b => b.Word);
+                }
+
+                if (VersionRejectedWords.Count() < 1)
+                {
+                    VersionRejectedWords = db.RejectedWords.Where(a => a.ListNameId == listID).OrderBy(b => b.Word);
+                }
             }
 
-            // Viewbags for Client and Version dropdown filters
-            var clients = await db.Clients.Include(m => m.ListNames).Where(m => m.ListNames.Any(l => l.IsRejected == true)).ToListAsync();
-            var versions = await db.ListNames.OrderBy(m => m.listName).ToListAsync();
-            ViewBag.WordLengths = new SelectList(WordLengthsDistinct.OrderBy(p => p), LengthFromFilter);
-            ViewBag.ClientList = new SelectList(clients.OrderBy(m => m.Name), "Id", "Name", clientGuid);
-            ViewBag.VersionList = new SelectList(versions.Where(m => m.ClientId == clientGuid && m.Live && m.IsRejected == true).ToList(), "Id", "listName", listGuid);
-
+            //isRedirect = true;
+            ViewBag.wordCount = "(" + VersionRejectedWords.Count().ToString() + ")";
             return View(await VersionRejectedWords.ToListAsync());
         }
-
 
 
         // GET: RejectedWords/Details/5
@@ -88,22 +168,26 @@ namespace WordLists.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RejectedWord RejectedWord = await db.RejectedWords.FindAsync(id);
-            if (RejectedWord == null)
+            RejectedWord rejectedWord = await db.RejectedWords.FindAsync(id);
+            if (rejectedWord == null)
             {
                 return HttpNotFound();
             }
-            return View(RejectedWord);
+            isRedirect = true;
+            return View(rejectedWord);
         }
 
         // GET: RejectedWords/Create/5
         public ActionResult Create()
         {
-            if (listGuid == null)
+           
+            isRedirect = true;
+            if (HttpContext.Session["listGuidRejected"] as Guid? == Guid.Empty)
             {
                 return RedirectToAction("Index");
             }
-            ViewBag.ListNameId = new SelectList(db.ListNames.Where(p => p.Id == listGuid && p.Live && p.IsRejected == true).OrderBy(m => m.listName), "Id", "listName");
+            var ListGuid = HttpContext.Session["listGuidRejected"] as Guid?;
+            ViewBag.ListNameId = new SelectList(db.ListNames.Where(p => p.Id == ListGuid && p.Archive == false && p.IsRejected == true).OrderBy(m => m.listName), "Id", "listName");
             return View();
         }
 
@@ -112,48 +196,92 @@ namespace WordLists.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,ListNameId,Word")] RejectedWord RejectedWord)
+        public async Task<ActionResult> Create([Bind(Include = "Id,ListNameId,Word")] RejectedWord rejectedWord)
         {
+            RejectedWord tempLNameID = new RejectedWord();
+            tempLNameID.ListNameId = rejectedWord.ListNameId;
+
             if (ModelState.IsValid)
             {
-                string text = RejectedWord.Word;
+                System.Web.HttpContext.Current.Session["hasAdded_r"] = 1;
+                string text = rejectedWord.Word;
+
                 MatchCollection matches = Regex.Matches(text, @"[\w\d_]+", RegexOptions.Singleline);
                 foreach (Match match in matches)
                 {
                     if (match.Success)
                     {
+                        bool canSave = true;
                         RejectedWord parsedWord = new RejectedWord();
                         parsedWord.Id = Guid.NewGuid();
                         parsedWord.Word = match.Value.ToUpperInvariant();
-                        parsedWord.ListNameId = RejectedWord.ListNameId;
-                        RejectedWord = parsedWord;
-                        db.RejectedWords.Add(RejectedWord);
-                        await db.SaveChangesAsync();
-                    }
+                        parsedWord.ListNameId = rejectedWord.ListNameId;
+                        rejectedWord = parsedWord;
 
+                        //don't save the word to anything if it already belongs to this list
+                        var listID = HttpContext.Session["listGuidRejected"] as Guid?;
+                        if (await db.RejectedWords.Where(m => m.ListNameId == listID).AnyAsync(p => p.Word == rejectedWord.Word))
+                        {
+                            canSave = false;
+                        }
+
+                       
+                        //remove word from all approved lists
+                        List<ApprovedWord> foundWords = await db.ApprovedWords.Where(x => x.Word == rejectedWord.Word).ToListAsync();
+                        if (foundWords != null)
+                        {
+                            db.ApprovedWords.RemoveRange(foundWords);
+                            await db.SaveChangesAsync();
+                        }
+
+
+                        //save the word to both this rejected list...
+                        if (canSave)
+                        {
+                            rejectedWord.ListNameId = tempLNameID.ListNameId;
+                            System.Web.HttpContext.Current.Session["hasAdded_r"] = 1;
+                            db.RejectedWords.Add(rejectedWord);
+                            await db.SaveChangesAsync();
+                        }
+
+                         //...and only to the master rejected list if it's not already in there
+                        if ( canSave && await db.RejectedWords.Where(m => m.ListName.listName == masterRejectedListName).AllAsync(p => p.Word != rejectedWord.Word))
+                        {
+                            var masterListID = await db.ListNames.Where(m => m.listName == masterRejectedListName).FirstAsync();
+                            if (rejectedWord.ListNameId != masterListID.Id)
+                            {
+                                rejectedWord.ListNameId = masterListID.Id;
+                                db.RejectedWords.Add(rejectedWord);
+                                await db.SaveChangesAsync();
+                            }
+                          
+                        }
+                    }
                 }
 
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ListNameId = new SelectList(db.ListNames.OrderBy(m => m.listName), "Id", "listName", RejectedWord.ListNameId);
-            return View(RejectedWord);
+            ViewBag.ListNameId = new SelectList(db.ListNames.OrderBy(m => m.listName), "Id", "listName", rejectedWord.ListNameId);
+            return View(rejectedWord);
         }
 
         // GET: RejectedWords/Edit/5
         public async Task<ActionResult> Edit(Guid? id)
         {
+            isRedirect = true;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RejectedWord RejectedWord = await db.RejectedWords.FindAsync(id);
-            if (RejectedWord == null)
+            RejectedWord rejectedWord = await db.RejectedWords.FindAsync(id);
+            if (rejectedWord == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ListNameId = new SelectList(db.ListNames.Where(p => p.Id == listGuid && p.Live && p.IsRejected == true).OrderBy(m => m.listName), "Id", "listName");
-            return View(RejectedWord);
+            Guid? list_ID = HttpContext.Session["listGuidRejected"] as Guid?;
+            ViewBag.ListNameId = new SelectList(db.ListNames.Where(p => p.Id == list_ID && p.Archive == false && p.IsRejected == true).OrderBy(m => m.listName), "Id", "listName");
+            return View(rejectedWord);
         }
 
         // POST: RejectedWords/Edit/5
@@ -161,31 +289,70 @@ namespace WordLists.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,ListNameId,Word")] RejectedWord RejectedWord)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,ListNameId,Word")] RejectedWord rejectedWord)
         {
+
+            Guid? list_ID = HttpContext.Session["listGuidRejected"] as Guid?;
             if (ModelState.IsValid)
             {
-                db.Entry(RejectedWord).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                bool canSave = true;
+
+                if (await db.RejectedWords.Where(m => m.ListNameId == list_ID).AnyAsync(p => p.Word == rejectedWord.Word))
+                {
+                    canSave = false;
+                }
+
+                List<ApprovedWord> foundWords = await db.ApprovedWords.Where(x => x.Word == rejectedWord.Word).ToListAsync();
+
+                if (foundWords != null)
+                {
+                    db.ApprovedWords.RemoveRange(foundWords);
+                    await db.SaveChangesAsync();
+                 }
+
+                //save the word to both this rejected list...
+                if (canSave)
+                {
+                    System.Web.HttpContext.Current.Session["hasAdded_r"] = 1;
+                    rejectedWord.Word = rejectedWord.Word.ToUpperInvariant();
+                    db.Entry(rejectedWord).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                }
+
+                //...and only to the master rejected list if it's not already in there
+                if (canSave && await db.RejectedWords.Where(m => m.ListName.listName == masterRejectedListName).AllAsync(p => p.Word != rejectedWord.Word))
+                {
+                    var masterListID = await db.ListNames.Where(m => m.listName == masterRejectedListName).FirstAsync();
+                    if (rejectedWord.ListNameId != masterListID.Id)
+                    {
+
+                        rejectedWord.ListNameId = masterListID.Id;
+                        db.RejectedWords.Add(rejectedWord);
+                        await db.SaveChangesAsync();
+                    }
+                }
+                    return RedirectToAction("Index");
             }
-            ViewBag.ListNameId = new SelectList(db.ListNames.Where(p => p.Id == listGuid && p.Live && p.IsRejected == true).OrderBy(m => m.listName), "Id", "listName");
-            return View(RejectedWord);
+
+
+            ViewBag.ListNameId = new SelectList(db.ListNames.Where(p => p.Id == list_ID && p.Archive == false && p.IsRejected == true).OrderBy(m => m.listName), "Id", "listName");
+            return View(rejectedWord);
         }
 
         // GET: RejectedWords/Delete/5
         public async Task<ActionResult> Delete(Guid? id)
         {
+            isRedirect = true;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RejectedWord RejectedWord = await db.RejectedWords.FindAsync(id);
-            if (RejectedWord == null)
+            RejectedWord rejectedWord = await db.RejectedWords.FindAsync(id);
+            if (rejectedWord == null)
             {
                 return HttpNotFound();
             }
-            return View(RejectedWord);
+            return View(rejectedWord);
         }
 
         // POST: RejectedWords/Delete/5
@@ -193,9 +360,11 @@ namespace WordLists.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            RejectedWord RejectedWord = await db.RejectedWords.FindAsync(id);
-            db.RejectedWords.Remove(RejectedWord);
+            System.Web.HttpContext.Current.Session["hasAdded_r"] = 1;
+            RejectedWord rejectedWord = await db.RejectedWords.FindAsync(id);
+            db.RejectedWords.Remove(rejectedWord);
             await db.SaveChangesAsync();
+            isRedirect = true;
             return RedirectToAction("Index");
         }
 

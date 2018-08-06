@@ -11,6 +11,7 @@ namespace WordLists.Models
         [Key]
         public Guid Id { get; set; }
 
+        [Required]
         [Display(Name = "Client Name")]
         public string Name { get; set; }
 
@@ -27,9 +28,13 @@ namespace WordLists.Models
         [ForeignKey("ClientId")]
         public Client Client { get; set; }
 
+        [Required]
         [Display(Name = "List Name")]
         public string listName { get; set; }
-        public bool Live { get; set; }
+
+        [Display(Name = "Archive")]
+        public bool Archive { get; set; }
+
         [Display(Name = "Rejected Words List")]
         public bool IsRejected { get; set; } = false;
 
@@ -47,7 +52,8 @@ namespace WordLists.Models
         [ForeignKey("ListNameId")]
         [Display(Name = "List Name")]
         public ListName ListName { get; set; }
-        
+
+        [Required]
         [Display(Name = "Approved Words")]
         public string Word { get; set; }
     }
@@ -62,6 +68,7 @@ namespace WordLists.Models
         [ForeignKey("ListNameId")]
         public ListName ListName { get; set; }
 
+        [Required]
         [Display(Name = "Rejected Words")]
         public string Word { get; set; }
     }

@@ -9,37 +9,41 @@
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
 @RenderSection("scripts", required: false)
+
+ 
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <html>
 <head>
     <title>@ViewBag.Title - IGT Word List Database</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-IGT">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-IGT">
         <a class="navbar"> <img src="~/Images/IGT_BLUE_small.gif" alt="Company logo" Height="40" Width="94" font/>Word List DB</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="true" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav mr-auto">
-                <l1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</l1>
+            <ul class="navbar-nav mr-auto" id="menu1">
+                <l1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</l1>
                 <li>
-                    <a class="navbar" href="~/ApprovedWords">Approved Words</a>
+                    <a class="navbar active" href="~/ApprovedWords">Approved Words</a>
                 </li>
                 <li>
-                    <a class="navbar" href="~/RejectedWords">Rejected Words</a>
+                    <a class="navbar" href="~/RejectedWords" >Rejected Words</a>
                 </li>
                 <li>
-                    <a class="navbar" href="~/ListNames">Client Word Lists</a>
+                    <a class="navbar" href="~/ListNames">Word Lists</a>
                 </li>
                 <li>
                     <a class="navbar" href="~/Clients">Clients</a>
                 </li>
             </ul>
-        </div>
-        <div class="navbar navbar-right">
+
+       </div>
+        @*<div class="navbar navbar-right">
             @Html.Partial("_LoginPartial")
-        </div>
+        </div>*@
     </nav>
     <br />
     <br />
