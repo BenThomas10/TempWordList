@@ -197,10 +197,13 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\ROApprovedController.cs" />
     <Compile Include="Controllers\ApprovedWordsController.cs" />
     <Compile Include="Controllers\ClientsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ROListsController.cs" />
     <Compile Include="Controllers\ListNamesController.cs" />
+    <Compile Include="Controllers\RORejectedController.cs" />
     <Compile Include="Controllers\RejectedWordsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -339,6 +342,9 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\ApprovedWords\_PartialWaiting.cshtml" />
+    <Content Include="Views\ROLists\Index.cshtml" />
+    <Content Include="Views\ROApproved\Index.cshtml" />
+    <Content Include="Views\RORejected\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

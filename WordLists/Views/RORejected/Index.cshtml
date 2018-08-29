@@ -11,7 +11,7 @@
     {
         <div>
             <h5>@Html.Label((string)ViewBag.RO_Client)&nbsp;-&nbsp;@Html.Label((string)ViewBag.RO_List)</h5> 
-            @Html.DropDownList("LengthFilter", (SelectList)ViewBag.WordLengths, "- All Lengths -", new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" })&nbsp;|&nbsp;@Html.ActionLink("Back to Lists", "Index", "ListNames")
+            @Html.DropDownList("LengthFilter", (SelectList)ViewBag.WordLengths, "- All Lengths -", new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;" })&nbsp;|&nbsp;@Html.ActionLink("Back to Lists", "Index", "ROLists")
         </div>
         <p> </p>
         <div hidden="hidden">
@@ -22,7 +22,7 @@
     {
         <div>
             <h5>@Html.Label((string)ViewBag.RO_Client)&nbsp;-&nbsp;@Html.Label((string)ViewBag.RO_List)</h5>
-            Rejected Words Archive | @Html.ActionLink("Back to Lists", "Index", "ListNames")
+            Rejected Words Archive | @Html.ActionLink("Back to Lists", "Index", "ROLists")
             @Html.DropDownList("LengthFilter", (SelectList)ViewBag.WordLengths, "- All Lengths -", new { onchange = "this.form.submit();", @class = "form-control-sm", @style = "display:inline;", @hidden = "hidden" })
         </div>
         <p> </p>
@@ -46,9 +46,6 @@
             <th>
                 @Html.ActionLink("Rejected Words", "Index", new { sortOrder = ViewBag.WordSort }) @ViewBag.wordCount
             </th>
-            <th>
-                 @Html.ActionLink("Add", "Create", "RejectedWords", new { @class = "btn btn-primary btn-sm" })
-            </th>
         </tr>
 
         @foreach (var item in Model)
@@ -57,7 +54,7 @@
                 @if (!ViewBag.DisableDD)
                 {
                     <td>
-                        @Html.ActionLink(item.Word, "Edit", new { id = item.Id })
+                        @item.Word
                     </td>
                 }
                 else
@@ -66,18 +63,6 @@
                         @Html.LabelForModel(item.Word, new { style = "color:orange;" })
                     </td>
                 }
-                <td>
-                    @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |*@
-                    @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
-                    @if (!ViewBag.DisableDD)
-                    {
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                    }
-                    else
-                    {
-                        @Html.Label("Delete")
-                    }
-                </td>
             </tr>
         }
 

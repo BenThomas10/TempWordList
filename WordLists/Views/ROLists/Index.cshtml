@@ -11,7 +11,7 @@
 </div>
 
 <p>
-    @Html.DropDownList("ClientFilter", (SelectList)ViewBag.ClientList, (string)ViewBag.DefaultClientName, new { onchange = "this.form.submit();", @class = "form-control-sm"}) &nbsp;&nbsp; @Html.ActionLink("Create New List", "Create", null, new { @class = "btn btn-primary btn-sm" }) &nbsp;&nbsp; @{ bool showArchive = ViewBag.Archive; }    @Html.CheckBox("ShowArchive", showArchive, new { onchange = "this.form.submit();" , @style = "display:inline;" })&nbsp;Show Archives
+    @Html.DropDownList("ClientFilter", (SelectList)ViewBag.ClientList, (string)ViewBag.DefaultClientName, new { onchange = "this.form.submit();", @class = "form-control-sm"}) &nbsp;&nbsp; @{ bool showArchive = ViewBag.Archive; }    @Html.CheckBox("ShowArchive", showArchive, new { onchange = "this.form.submit();" , @style = "display:inline;" })&nbsp;Show Archives
 </p>
 
     <table class="table">
@@ -29,7 +29,7 @@
                 @Html.ActionLink("Archive", "Index", new { sortOrder = ViewBag.ArchiveSort })
             </th>
             <th>
-                @Html.ActionLink("ID", "Index", new { sortOrder = ViewBag.ID_Sort })
+                @Html.ActionLink("List ID  ", "Index", new { sortOrder = ViewBag.ID_Sort })
             </th>
             <th>
                 @Html.ActionLink("Created", "Index", new { sortOrder = ViewBag.CreatedSort })
@@ -51,13 +51,13 @@
 if (!item.IsRejected)
 {
     <td>
-        @Html.ActionLink(item.listName, "Index", "ApprovedWords", new { ClientFilter = item.ClientId, VersionFilter = item.Id, LN = true }, null)
+        @Html.ActionLink(item.listName, "Index", "ROApproved", new { ClientFilter = item.ClientId, VersionFilter = item.Id, LN = true }, null)
     </td>
 }
-else
+else    
 {
     <td>
-        @Html.ActionLink(item.listName, "Index", "RejectedWords", new { ClientFilter = item.ClientId, VersionFilter = item.Id, LN = true }, null)
+        @Html.ActionLink(item.listName, "Index", "RORejected", new { ClientFilter = item.ClientId, VersionFilter = item.Id, LN = true }, null)
     </td>
 
     }
@@ -65,13 +65,13 @@ else
 else if (!item.IsRejected)
 {
     <td>
-       @Html.ActionLink(item.listName, "Index", "ApprovedWords", new { ClientFilter = item.ClientId, VersionFilter = item.Id, LN = true }, new { style = "color:orange;" }) 
+       @Html.ActionLink(item.listName, "Index", "ROApproved", new { ClientFilter = item.ClientId, VersionFilter = item.Id, LN = true }, new { style = "color:orange;" }) 
     </td>
 }
 else
 {
     <td>
-        @Html.ActionLink(item.listName, "Index", "RejectedWords", new { ClientFilter = item.ClientId, VersionFilter = item.Id, LN = true }, new { style = "color:orange;" })
+        @Html.ActionLink(item.listName, "Index", "RORejected", new { ClientFilter = item.ClientId, VersionFilter = item.Id, LN = true }, new { style = "color:orange;" })
     </td>
 }
                 <td>
@@ -91,9 +91,7 @@ else
                 </td>
                 
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) | 
                         @Html.ActionLink("Export", "ExportToWord", new { ListFilter = item.Id, Rejected = item.IsRejected })
-                        @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@ 
                     </td>
                 </tr>
         }

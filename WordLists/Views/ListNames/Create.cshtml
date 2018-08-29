@@ -1,6 +1,18 @@
 ﻿@model WordLists.Models.ListName
 
-@*@{
+@section scripts {
+    <script type="text/javascript">
+
+        $(document).ready(function () { });
+        function showDiag()
+        {
+            openModel.hidden = false;
+        }
+            </script>
+}
+@*
+
+@{
     ViewBag.Title = "Create";
 }
 
@@ -31,9 +43,6 @@
             </div>
         </div>
 
-        <div class="text-danger">
-            @ViewBag.Warning
-        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.IsRejected, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -46,9 +55,17 @@
         </div>
 
         <div class="form-group">
+            @Html.Label("Words", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-lg-12">
+                @Html.TextArea("Word", new { @class = "form-control", @rows = 10, @cols = 5 })
+                @Html.ValidationMessage("Word", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" hidden="hidden">
             @Html.LabelFor(model => model.Archive, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
+            <div class="col-md-10" >
+                <div class="checkbox" >
                     @Html.EditorFor(model => model.Archive)
                     @Html.ValidationMessageFor(model => model.Archive, "", new { @class = "text-danger" })
                 </div>
@@ -57,16 +74,25 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" /> | @Html.ActionLink("Back to List", "Index")
+                <input type="submit" value="Create" class="btn btn-default" onclick="showDiag()" /> | @Html.ActionLink("Back to List", "Index")
             </div>
         </div>
     </div>
+
+    <div class="text-danger">
+        @ViewBag.Warning
+    </div>
+
+    <div id="openModel" class="text-danger" hidden="hidden">
+        &nbsp;&nbsp;&nbsp;&nbsp; Working. Please wait...
+    </div>
 }
+
 
 @*<div>
     @Html.ActionLink("Back to List", "Index")
 </div>*@
 
-@section Scripts {
+@*@section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-}
+}*@

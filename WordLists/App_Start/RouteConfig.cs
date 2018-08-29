@@ -16,7 +16,7 @@ namespace WordLists
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "ApprovedWords", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "ROLists", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 
 namespace WordLists.Controllers
 {
-    public class ListNamesController : Controller
+    public class ROListsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private string masterRejectedListName = "Master Rejected Word List";

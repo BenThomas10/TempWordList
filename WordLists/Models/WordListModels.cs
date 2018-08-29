@@ -25,6 +25,9 @@ namespace WordLists.Models
         public Guid Id { get; set; }
         public Guid ClientId { get; set; }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ListID { get; set; }
+
         [ForeignKey("ClientId")]
         public Client Client { get; set; }
 
@@ -37,6 +40,12 @@ namespace WordLists.Models
 
         [Display(Name = "Rejected Words List")]
         public bool IsRejected { get; set; } = false;
+
+        [Display(Name = "Created")]
+        public DateTime DateCreated { get; set; }
+
+        [Display(Name = "Modified")]
+        public DateTime DateModified { get; set; }
 
         public ICollection<ApprovedWord> ApprovedWords { get; set; }
         public ICollection<RejectedWord> RejectedWords { get; set; }
@@ -56,6 +65,8 @@ namespace WordLists.Models
         [Required]
         [Display(Name = "Approved Words")]
         public string Word { get; set; }
+
+        public bool onRejected { get; set; } = false;
     }
 
     public class RejectedWord

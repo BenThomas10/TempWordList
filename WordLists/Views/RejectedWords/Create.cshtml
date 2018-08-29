@@ -42,12 +42,15 @@
                 @Html.ValidationMessageFor(model => model.Word, "", new { @class = "text-danger" })
             </div>
         </div>
+      
 
         <div class="form-group">
             <div class="col-md-offset-2 col-lg-12">
-                <input type="submit" value="Create" class="btn btn-default" onclick="showDiag()" /> | @Html.ActionLink("Back to List", "Index")
+                <input type = "submit" value="Create" class="btn btn-default" onclick="showDiag()" /> | @Html.ActionLink("Back to List", "Index")
             </div>
         </div>
+      
+
     </div>
 
     <div id="openModel" class="text-danger" hidden="hidden">
@@ -55,8 +58,5 @@
     </div>
 }
 
-@*<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>*@
 
 

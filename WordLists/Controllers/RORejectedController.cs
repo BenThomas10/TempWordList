@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace WordLists.Controllers
 {
-    public class RejectedWordsController : Controller
+    public class RORejectedController : Controller
     {
 
         //this name controls the master rejected list name to look for when rejecting approved words
@@ -182,7 +182,7 @@ namespace WordLists.Controllers
                 System.Web.HttpContext.Current.Session["hasAdded"] = 1;
                 ViewBag.DefaultClientName = null;
                 ViewBag.DefaultListName = null;
-                Response.Redirect("~/RejectedWords");
+                Response.Redirect("~/RORejected");
                 Lengths.Clear();
                 var list_Guid = System.Web.HttpContext.Current.Session["listGuid"] as Guid?;
                 foreach (var aw in db.RejectedWords.Where(a => a.ListNameId == list_Guid))
